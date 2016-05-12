@@ -27,13 +27,12 @@ namespace IPChanger
         {
             InitializeComponent();
             interfaces = Netsh.GetAllInterfaceInformation();
-
-            interfaces.ForEach(i => listInterfaces.Items.Add(i.Name));            
+            listInterfaces.ItemsSource = interfaces;
         }
 
         private void listInterfaces_SelectionChanged(object sender, SelectionChangedEventArgs e)
         {
-            this.DataContext = interfaces.Find(f => f.Name.Equals(listInterfaces.SelectedValue));
+            this.DataContext = interfaces.Find(f => f.Name.Equals(((InterfaceInformation)listInterfaces.SelectedValue).Name));
         }
     }
 }

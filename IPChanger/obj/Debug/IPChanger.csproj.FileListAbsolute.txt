@@ -10,3 +10,4 @@ C:\riversquid\IPChanger\IPChanger\obj\Debug\IPChanger.Properties.Resources.resou
 C:\riversquid\IPChanger\IPChanger\obj\Debug\IPChanger.csproj.GenerateResource.Cache
 C:\riversquid\IPChanger\IPChanger\obj\Debug\IPChanger.exe
 C:\riversquid\IPChanger\IPChanger\obj\Debug\IPChanger.pdb
+C:\riversquid\IPChanger\IPChanger\obj\Debug\IPChanger.csprojResolveAssemblyReference.cache

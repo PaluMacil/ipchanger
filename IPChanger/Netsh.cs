@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.ComponentModel;
 using System.Diagnostics;
 using System.Linq;
 using System.Text;
@@ -130,6 +131,44 @@ namespace IPChanger
             return information;
         }
 
+        /// <summary>
+        /// Sets the interface given the specified information.
+        /// </summary>
+        /// <param name="savedInterface">interface information to be set</param>
+        /// <returns>Returns true if successful</returns>
+        internal static bool SetInterface(SavedInterface savedInterface)
+        {
+            if(savedInterface.IsDHCP)
+            {
+                string arguments = string.Format("interface ipv4 set address name=\"{0}\" source=dhcp", savedInterface.Name);
+                Process p = CreateNetShProcess(arguments);
+                p.Start();
 
+                //need to wait for results to update in netsh.
+                System.Threading.Thread.Sleep(5000);
+                InterfaceInformation newInformation = GetInterfaceInformation(savedInterface.Name);
+                if(newInformation.IsDHCP)
+                {
+                    return true;
+                }
+            }
+            else
+            {
+                string arguments = string.Format("interface ipv4 set address name=\"{0}\" sour=static address={1} mask={2} gateway={3}", savedInterface.Name, savedInterface.IPAddress, savedInterface.IPMask, savedInterface.Gateway);
+
+                Process p = CreateNetShProcess(arguments);
+                p.Start();
+
+                //need to wait for results to update in netsh.
+                System.Threading.Thread.Sleep(5000);
+                //need to confirm the change worked
+                InterfaceInformation newInformation = GetInterfaceInformation(savedInterface.Name);
+                if(newInformation.IPAddress.Equals(savedInterface.IPAddress))
+                {
+                    return true;
+                }
+            }
+            return false;
+        }
     }
 }
