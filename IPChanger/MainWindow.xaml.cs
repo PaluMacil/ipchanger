@@ -20,9 +20,20 @@ namespace IPChanger
     /// </summary>
     public partial class MainWindow : Window
     {
+
+        List<InterfaceInformation> interfaces = new List<InterfaceInformation>();
+
         public MainWindow()
         {
             InitializeComponent();
+            interfaces = Netsh.GetAllInterfaceInformation();
+
+            interfaces.ForEach(i => listInterfaces.Items.Add(i.Name));            
+        }
+
+        private void listInterfaces_SelectionChanged(object sender, SelectionChangedEventArgs e)
+        {
+            this.DataContext = interfaces.Find(f => f.Name.Equals(listInterfaces.SelectedValue));
         }
     }
 }
