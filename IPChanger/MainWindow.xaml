@@ -27,10 +27,10 @@
                 </StackPanel>
                 <StackPanel Orientation="Horizontal">
                     <Label Content="DHCP: " Width="120" />
-                    <Label Name="txtIsDHCP" >
+                    <Label Name="txtIsDHCP">
                         <Label.Style>
                             <Style TargetType="{x:Type Label}">
-                                <Setter Property="Content" Value=""/>
+                                <Setter Property="Content" Value="" />
                                 <Style.Triggers>
                                     <DataTrigger Binding="{Binding IsDHCP}" Value="True">
                                         <Setter Property="Label.Content" Value="Yes" />
@@ -55,7 +55,7 @@
                 </StackPanel>
                     <Button Content="Change Address" Margin="10,5,5,0" Name="btnChangeAddress" Click="btnChangeAddress_Click" />
                 </StackPanel>
-            </StackPanel>
+                </StackPanel>
         </StackPanel>
     </Grid>
 </Window>

@@ -1,9 +1,5 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.IO;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using System.Xml;
 using System.Xml.Serialization;
 
@@ -11,7 +7,6 @@ namespace IPChanger
 {
     public class SavedInterface
     {
-
         public string SavedInterfaceName { get; set; }
         public string Name { get; set; }
         public bool IsDHCP { get; set; }
@@ -59,6 +54,7 @@ namespace IPChanger
             }
             return savedInterfaces;
         }
+<<<<<<< HEAD
 
         public static SavedInterface ConvertInterfacetoSavedInterface(InterfaceInformation intf, string savedName)
         {
@@ -73,5 +69,7 @@ namespace IPChanger
             return newInt;
         }
 
+=======
+>>>>>>> 55be05d23def409ae4f56d45c64676f29cd7ba36
     }
 }

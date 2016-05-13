@@ -1,10 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.ComponentModel;
 using System.Diagnostics;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace IPChanger
 {
@@ -31,17 +27,17 @@ namespace IPChanger
 
             string output = "";
             
-            while(!output.Contains("---"))
+            while (!output.Contains("---"))
             {
                 output = p.StandardOutput.ReadLine();
             }
             
             //next lines will be the interfaces
             
-            while(!p.StandardOutput.EndOfStream)
+            while (!p.StandardOutput.EndOfStream)
             {
                 string[] interfaceParts = p.StandardOutput.ReadLine().Split((char[])null, StringSplitOptions.RemoveEmptyEntries);
-                if(interfaceParts.Length >= 5)
+                if (interfaceParts.Length >= 5)
                 {
                     //likely a valid interface
                     string interfaceName = "";
@@ -66,7 +62,7 @@ namespace IPChanger
 
             string output = "";
 
-            while(!output.Contains("Configuration for"))
+            while (!output.Contains("Configuration for"))
             {
                 output = p.StandardOutput.ReadLine();
             }
@@ -78,11 +74,11 @@ namespace IPChanger
             output = p.StandardOutput.ReadLine();
 
             //always confirm we're reading the correct lines
-            if(output == null && p.StandardOutput.EndOfStream)
+            if (output == null && p.StandardOutput.EndOfStream)
             {
                 return information;
             }
-            if(output.Contains("DHCP"))
+            if (output.Contains("DHCP"))
             {
                 information.IsDHCP = output.Contains("Yes");
             }
@@ -93,7 +89,7 @@ namespace IPChanger
             {
                 return information;
             }
-            if(output.Contains("IP Address"))
+            if (output.Contains("IP Address"))
             {
                 string[] ipSplit = output.Split((char[])null, StringSplitOptions.RemoveEmptyEntries);
                 
@@ -108,7 +104,7 @@ namespace IPChanger
                 return information;
             }
             //next line MASK
-            if(output.Contains("Subnet Prefix"))
+            if (output.Contains("Subnet Prefix"))
             {
                 string[] maskSplit = output.Split((char[])null, StringSplitOptions.RemoveEmptyEntries);
 
@@ -121,7 +117,7 @@ namespace IPChanger
                 return information;
             }
             //next line gateway
-            if(output.Contains("Default Gateway"))
+            if (output.Contains("Default Gateway"))
             {
                 string[] gatewaySplit = output.Split((char[])null, StringSplitOptions.RemoveEmptyEntries);
 
@@ -138,7 +134,7 @@ namespace IPChanger
         /// <returns>Returns true if successful</returns>
         internal static bool SetInterface(SavedInterface savedInterface)
         {
-            if(savedInterface.IsDHCP)
+            if (savedInterface.IsDHCP)
             {
                 string arguments = string.Format("interface ipv4 set address name=\"{0}\" source=dhcp", savedInterface.Name);
                 Process p = CreateNetShProcess(arguments);
