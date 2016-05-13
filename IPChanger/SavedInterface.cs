@@ -64,7 +64,6 @@ namespace IPChanger
             newInt.IPMask = intf.IPMask;
             newInt.Gateway = intf.Gateway;
             newInt.IsDHCP = intf.IsDHCP;
-
             return newInt;
         }
 

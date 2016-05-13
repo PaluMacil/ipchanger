@@ -145,7 +145,7 @@ namespace IPChanger
                 InterfaceInformation newInformation = GetInterfaceInformation(savedInterface.Name);
                 int maxRetries = 15;
                 int retries = 0;
-                while(!newInformation.IsDHCP)
+                while(!newInformation.IsDHCP || newInformation.IPAddress == null)
                 {
                     //retry until the result works, or we've hit a max number of retries.
                     System.Threading.Thread.Sleep(250);
