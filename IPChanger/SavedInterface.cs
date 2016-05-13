@@ -9,15 +9,10 @@ using System.Xml.Serialization;
 
 namespace IPChanger
 {
-    public class SavedInterface
+    public class SavedInterface : InterfaceInformation
     {
 
         public string SavedInterfaceName { get; set; }
-        public string Name { get; set; }
-        public bool IsDHCP { get; set; }
-        public string IPAddress { get; set; }
-        public string IPMask { get; set; }
-        public string Gateway { get; set; }
 
         public override string ToString()
         {
