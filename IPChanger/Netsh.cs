@@ -6,7 +6,13 @@ namespace IPChanger
 {
     public static class Netsh
     {
-        internal static Process CreateNetShProcess(string arguments)
+
+        /// <summary>
+        /// Creates a netsh process with the specified arguments.  This starts with no window.
+        /// </summary>
+        /// <param name="arguments">Arguments (command) for the netsh process</param>
+        /// <returns>the process before it is started</returns>
+        private static Process CreateNetShProcess(string arguments)
         {
             Process p = new Process();
             p.StartInfo.FileName = "netsh.exe";
@@ -19,6 +25,10 @@ namespace IPChanger
             return p;
         }
 
+        /// <summary>
+        /// Gets a list of all information for the interfaces on a computer
+        /// </summary>
+        /// <returns>List of information for each interface</returns>
         internal static List<InterfaceInformation> GetAllInterfaceInformation()
         {
             string interfaces = "";
@@ -56,6 +66,11 @@ namespace IPChanger
             return interfaceList;
         }
 
+        /// <summary>
+        /// Gets the current information for the interface
+        /// </summary>
+        /// <param name="interfaceName">Name of the interface to retrieve information for</param>
+        /// <returns>Information for the interface</returns>
         internal static InterfaceInformation GetInterfaceInformation(string interfaceName)
         {
             Process p = CreateNetShProcess("interface ipv4 show addresses \"" + interfaceName + "\"");
