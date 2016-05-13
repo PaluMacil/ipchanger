@@ -11,3 +11,16 @@ C:\riversquid\IPChanger\IPChanger\obj\Debug\IPChanger.csproj.GenerateResource.Ca
 C:\riversquid\IPChanger\IPChanger\obj\Debug\IPChanger.exe
 C:\riversquid\IPChanger\IPChanger\obj\Debug\IPChanger.pdb
 C:\riversquid\IPChanger\IPChanger\obj\Debug\IPChanger.csprojResolveAssemblyReference.cache
+C:\CodePlayground\IPChanger\bin\Debug\IPChanger.exe.config
+C:\CodePlayground\IPChanger\bin\Debug\IPChanger.exe
+C:\CodePlayground\IPChanger\bin\Debug\IPChanger.pdb
+C:\CodePlayground\IPChanger\obj\Debug\IPChanger.csprojResolveAssemblyReference.cache
+C:\CodePlayground\IPChanger\obj\Debug\MainWindow.baml
+C:\CodePlayground\IPChanger\obj\Debug\MainWindow.g.cs
+C:\CodePlayground\IPChanger\obj\Debug\App.g.cs
+C:\CodePlayground\IPChanger\obj\Debug\IPChanger_MarkupCompile.cache
+C:\CodePlayground\IPChanger\obj\Debug\IPChanger.g.resources
+C:\CodePlayground\IPChanger\obj\Debug\IPChanger.Properties.Resources.resources
+C:\CodePlayground\IPChanger\obj\Debug\IPChanger.csproj.GenerateResource.Cache
+C:\CodePlayground\IPChanger\obj\Debug\IPChanger.exe
+C:\CodePlayground\IPChanger\obj\Debug\IPChanger.pdb

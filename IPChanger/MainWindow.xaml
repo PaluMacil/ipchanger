@@ -4,7 +4,7 @@
         Title="MainWindow" Height="350" Width="525">
     <Grid>
         <StackPanel Orientation="Horizontal">
-        <ListBox Name="listInterfaces" SelectionChanged="listInterfaces_SelectionChanged" Width="200" Height="300" HorizontalAlignment="Left" Margin="10,0,0,0" />
+            <ListBox Name="listInterfaces" SelectionChanged="listInterfaces_SelectionChanged" Width="200" HorizontalAlignment="Left" Margin="10,10,0,128" />
             <StackPanel Width="250">
                 <StackPanel Orientation="Horizontal">
                     <Label Content="Interface Name: " Width="120" />
@@ -24,10 +24,10 @@
                 </StackPanel>
                 <StackPanel Orientation="Horizontal">
                     <Label Content="DHCP: " Width="120" />
-                    <Label Name="txtIsDHCP" >
+                    <Label Name="txtIsDHCP">
                         <Label.Style>
                             <Style TargetType="{x:Type Label}">
-                                <Setter Property="Content" Value=""/>
+                                <Setter Property="Content" Value="" />
                                 <Style.Triggers>
                                     <DataTrigger Binding="{Binding IsDHCP}" Value="True">
                                         <Setter Property="Label.Content" Value="Yes" />
@@ -40,8 +40,7 @@
                         </Label.Style>
                     </Label>
                 </StackPanel>
-
-                </StackPanel>
+            </StackPanel>
         </StackPanel>
     </Grid>
 </Window>
