@@ -26,21 +26,30 @@ namespace IPChanger
 
         public static void Serialize(List<SavedInterface> info)
         {
-            var serializer = new XmlSerializer(info.GetType());
+            List<SavedInterface> allNotNullInterfaces = new List<SavedInterface>();
+            foreach(SavedInterface intf in info)
+            {
+                if(intf != null)
+                {
+                    allNotNullInterfaces.Add(intf);
+                }
+            }
+
+            var serializer = new XmlSerializer(allNotNullInterfaces.GetType());
             if (!Directory.Exists(@"C:\programdata\riversquid"))
             {
                 Directory.CreateDirectory(@"C:\programdata\riversquid");
             }
             using (var writer = XmlWriter.Create(@"C:\programdata\riversquid\savedInterfaces.xml"))
             {
-                serializer.Serialize(writer, info);
+                serializer.Serialize(writer, allNotNullInterfaces);
             }
         }
 
         public static List<SavedInterface> Deserialize()
         {
             var serializer = new XmlSerializer(typeof(List<SavedInterface>));
-            List<SavedInterface> savedInterfaces = null;
+            List<SavedInterface> savedInterfaces = new List<SavedInterface>();
             if (File.Exists(@"C:\programdata\riversquid\savedInterfaces.xml"))
             {
                 using (var reader = XmlReader.Create(@"C:\programdata\riversquid\savedInterfaces.xml"))
@@ -49,6 +58,19 @@ namespace IPChanger
                 }
             }
             return savedInterfaces;
+        }
+
+        public static SavedInterface ConvertInterfacetoSavedInterface(InterfaceInformation intf, string savedName)
+        {
+            SavedInterface newInt = new SavedInterface();
+            newInt.SavedInterfaceName = savedName;
+            newInt.Name = intf.Name;
+            newInt.IPAddress = intf.IPAddress;
+            newInt.IPMask = intf.IPMask;
+            newInt.Gateway = intf.Gateway;
+            newInt.IsDHCP = intf.IsDHCP;
+
+            return newInt;
         }
 
     }

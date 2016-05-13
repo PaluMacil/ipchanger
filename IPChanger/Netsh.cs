@@ -145,9 +145,21 @@ namespace IPChanger
                 p.Start();
 
                 //need to wait for results to update in netsh.
-                System.Threading.Thread.Sleep(5000);
                 InterfaceInformation newInformation = GetInterfaceInformation(savedInterface.Name);
-                if(newInformation.IsDHCP)
+                int maxRetries = 15;
+                int retries = 0;
+                while(!newInformation.IsDHCP)
+                {
+                    //retry until the result works, or we've hit a max number of retries.
+                    System.Threading.Thread.Sleep(250);
+                    newInformation = GetInterfaceInformation(savedInterface.Name);
+                    retries++;
+                    if(retries >= maxRetries)
+                    {
+                        return false;
+                    }
+                }
+                if (newInformation.IsDHCP)
                 {
                     return true;
                 }
@@ -160,10 +172,21 @@ namespace IPChanger
                 p.Start();
 
                 //need to wait for results to update in netsh.
-                System.Threading.Thread.Sleep(5000);
                 //need to confirm the change worked
                 InterfaceInformation newInformation = GetInterfaceInformation(savedInterface.Name);
-                if(newInformation.IPAddress.Equals(savedInterface.IPAddress))
+                int maxRetries = 15;
+                int retries = 0;
+                while(newInformation.IPAddress == null || !newInformation.IPAddress.Equals(savedInterface.IPAddress))
+                {
+                    System.Threading.Thread.Sleep(250);
+                    newInformation = GetInterfaceInformation(savedInterface.Name);
+                    retries++;
+                    if (retries >= maxRetries)
+                    {
+                        return false;
+                    }
+                }
+                if (!newInformation.IsDHCP || newInformation.IPAddress.Equals(savedInterface.IPAddress))
                 {
                     return true;
                 }
