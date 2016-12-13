@@ -45,7 +45,7 @@ namespace IPChanger
             newInterface.IPAddress = txtIPAddress.Text;
             newInterface.IPMask = txtMask.Text;
             newInterface.Gateway = txtGateway.Text;
-            newInterface.IsDHCP = cbDHCP.SelectedValue == "Yes";
+            newInterface.IsDHCP = ((ComboBoxItem)cbDHCP.SelectedValue).Content.Equals("Yes");
 
             SavedInterface = newInterface;
             this.DialogResult = true;

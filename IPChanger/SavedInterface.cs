@@ -60,7 +60,7 @@ namespace IPChanger
             SavedInterface newInt = new SavedInterface();
             newInt.SavedInterfaceName = savedName;
             newInt.Name = intf.Name;
-            newInt.IPAddress = intf.IPAddress;
+            newInt.IPAddress = intf.IPAddress; 
             newInt.IPMask = intf.IPMask;
             newInt.Gateway = intf.Gateway;
             newInt.IsDHCP = intf.IsDHCP;

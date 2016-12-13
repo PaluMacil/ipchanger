@@ -1,4 +1,7 @@
-﻿using System.Collections.Generic;
+﻿using Microsoft.Win32;
+using System;
+using System.Collections.Generic;
+using System.Net.NetworkInformation;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Input;
@@ -13,14 +16,34 @@ namespace IPChanger
         List<InterfaceInformation> interfaces = new List<InterfaceInformation>();
         List<SavedInterface> savedInterfaces = new List<SavedInterface>();
 
+        NetworkInterface[] networkInterfaces;
+
         public MainWindow()
         {
             InitializeComponent();
-
+            interfaces = InterfaceInformation.Deserialize();
             savedInterfaces = SavedInterface.Deserialize();
 
             updateAllInterfaces();
             listInterfaces.ItemsSource = interfaces;
+           
+            networkInterfaces = System.Net.NetworkInformation.NetworkInterface.GetAllNetworkInterfaces();
+            System.Timers.Timer t = new System.Timers.Timer();
+            t.Interval = 1000;
+            t.Elapsed += delegate
+            {
+                IPConfig.SetInterfaceState(interfaces);
+            };
+            t.Start();
+        }
+
+        void inf_CablePluggedIn(object sender, System.EventArgs e)
+        {
+            Dispatcher.Invoke(new Action(delegate
+            {
+                NetworkAutoplay autoPlay = new NetworkAutoplay((InterfaceInformation)sender);
+                autoPlay.InterfaceChanged += delegate { updateAllInterfaces(); };
+            }), System.Windows.Threading.DispatcherPriority.Render);
         }
 
         private void listInterfaces_SelectionChanged(object sender, SelectionChangedEventArgs e)
@@ -62,6 +85,7 @@ namespace IPChanger
                 if(addressChanged)
                 {
                     updateAllInterfaces();
+                    updateDataContext();
                 }
             }
         }
@@ -84,17 +108,29 @@ namespace IPChanger
 
         private void updateAllInterfaces()
         {
-            interfaces = Netsh.GetAllInterfaceInformation();
+            foreach (InterfaceInformation inf in interfaces)
+            {
+                inf.CablePluggedIn -= inf_CablePluggedIn;
+            }
+            interfaces = Netsh.GetAllInterfaceInformation(interfaces);
+            foreach (InterfaceInformation inf in interfaces)
+            {
+                inf.CablePluggedIn += inf_CablePluggedIn;
+            }
             updateDataContext();
+            InterfaceInformation.Serialize(interfaces);
         }
 
         private void updateDataContext()
         {
-            if (listInterfaces.SelectedValue != null)
+            Dispatcher.Invoke(new Action(delegate
             {
-            this.DataContext = interfaces.Find(f => f.Name.Equals(((InterfaceInformation)listInterfaces.SelectedValue).Name));
+                if (listInterfaces.SelectedValue != null)
+                {
+                    this.DataContext = interfaces.Find(f => f.Name.Equals(((InterfaceInformation)listInterfaces.SelectedValue).Name));
+                }
+            }));
         }
-    }
 
         private void updateSavedInterfaces()
         {
@@ -115,6 +151,11 @@ namespace IPChanger
                     updateAllInterfaces();
                 }
             }
+        }
+
+        private void chkEnableAutoPlay_Checked(object sender, RoutedEventArgs e)
+        {
+            ((InterfaceInformation)this.DataContext).EnableAutoPlay = true;
         }
     }
 }

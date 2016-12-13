@@ -29,7 +29,7 @@ namespace IPChanger
         /// Gets a list of all information for the interfaces on a computer
         /// </summary>
         /// <returns>List of information for each interface</returns>
-        internal static List<InterfaceInformation> GetAllInterfaceInformation()
+        internal static List<InterfaceInformation> GetAllInterfaceInformation(List<InterfaceInformation> currentInterfaces)
         {
             string interfaces = "";
             List<InterfaceInformation> interfaceList = new List<InterfaceInformation>();
@@ -57,7 +57,8 @@ namespace IPChanger
                         interfaceName += interfaceParts[i] + " ";
                     }
                     interfaceName = interfaceName.Substring(0, interfaceName.Length - 1);
-                    interfaceList.Add(GetInterfaceInformation(interfaceName));
+                    InterfaceInformation currentInterface = currentInterfaces.Find(ci => ci.Name.Equals(interfaceName));
+                    interfaceList.Add(GetOrUpdateInterfaceInformation(interfaceName, currentInterface));
                     interfaces += interfaceName + ",";
                 }
             }
@@ -71,8 +72,14 @@ namespace IPChanger
         /// </summary>
         /// <param name="interfaceName">Name of the interface to retrieve information for</param>
         /// <returns>Information for the interface</returns>
-        internal static InterfaceInformation GetInterfaceInformation(string interfaceName)
+        internal static InterfaceInformation GetOrUpdateInterfaceInformation(string interfaceName, InterfaceInformation currentInterface)
         {
+            InterfaceInformation information = new InterfaceInformation();
+            if (currentInterface != null)
+            {
+                information = currentInterface;
+            }
+
             Process p = CreateNetShProcess("interface ipv4 show addresses \"" + interfaceName + "\"");
             p.Start();
 
@@ -84,7 +91,8 @@ namespace IPChanger
             }
 
             //next line will be interface information
-            InterfaceInformation information = new InterfaceInformation();
+            
+            
             information.Name = interfaceName;
 
             output = p.StandardOutput.ReadLine();
@@ -157,14 +165,14 @@ namespace IPChanger
                 p.Start();
 
                 //need to wait for results to update in netsh.
-                InterfaceInformation newInformation = GetInterfaceInformation(savedInterface.Name);
-                int maxRetries = 15;
+                InterfaceInformation newInformation = GetOrUpdateInterfaceInformation(savedInterface.Name, null);
+                int maxRetries = 60;
                 int retries = 0;
                 while(!newInformation.IsDHCP || newInformation.IPAddress == null)
                 {
                     //retry until the result works, or we've hit a max number of retries.
-                    System.Threading.Thread.Sleep(250);
-                    newInformation = GetInterfaceInformation(savedInterface.Name);
+                    System.Threading.Thread.Sleep(100);
+                    newInformation = GetOrUpdateInterfaceInformation(savedInterface.Name, null);
                     retries++;
                     if(retries >= maxRetries)
                     {
@@ -185,16 +193,17 @@ namespace IPChanger
 
                 //need to wait for results to update in netsh.
                 //need to confirm the change worked
-                InterfaceInformation newInformation = GetInterfaceInformation(savedInterface.Name);
-                int maxRetries = 15;
+                InterfaceInformation newInformation = GetOrUpdateInterfaceInformation(savedInterface.Name, null);
+                int maxRetries = 60;
                 int retries = 0;
                 while(newInformation.IPAddress == null || !newInformation.IPAddress.Equals(savedInterface.IPAddress))
                 {
-                    System.Threading.Thread.Sleep(250);
-                    newInformation = GetInterfaceInformation(savedInterface.Name);
+                    System.Threading.Thread.Sleep(100);
+                    newInformation = GetOrUpdateInterfaceInformation(savedInterface.Name, null);
                     retries++;
                     if (retries >= maxRetries)
                     {
+                        Console.WriteLine("Max retries hit");
                         return false;
                     }
                 }
